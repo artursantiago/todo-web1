@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+
+  <style>
+    .hide {
+      display: none;
+    }
+
+    .boards {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+
+    .board {
+      padding: 24px 16px 0;
+      min-width: 280px;
+      border: 1px solid black;
+      margin-top: 24px;
+    }
+
+    .dropzone {
+      padding-bottom: 48px;
+      height: 100%;
+      min-height: 200px;
+      width: 100%;
+    }
+
+    .card {
+      border: 1px solid black;
+    }
+
+    .card[draggable=true] {
+      cursor: grab;
+    }
+
+    .card.is-dragging {
+      cursor: move;
+    }
+
+    .card+.card {
+      margin-top: 24px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>TODO</h1>
+  </header>
+  <section>
+    <form class="editing">
+      <input id="id" type="text" class="hide" value="">
+      <div>
+        <label for="name">Nome da tarefa</label>
+        <input id="name" type="text">
+      </div>
+      <div>
+        <label for="description">Descrição da tarefa</label>
+        <input id="description" type="text">
+      </div>
+      <div>
+        <label for="assignee">Atribuir para</label>
+        <input id="assignee" type="text">
+      </div>
+      <div>
+        <label for="deadline">Prazo de entrega</label>
+        <input id="deadline" type="date">
+      </div>
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <main>
+    <div class="boards">
+      <div class="board">
+        <h3>A Fazer</h3>
+        <div class="dropzone">
+        </div>
+      </div>
+
+      <div class="board">
+        <h3>Fazendo</h3>
+        <div class="dropzone">
+        </div>
+      </div>
+      <div class="board">
+        <h3>Feito</h3>
+        <div class="dropzone">
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
