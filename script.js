@@ -63,7 +63,7 @@ function addNewTaskToTheDOM(task) {
   newTodoCard.setAttribute("id", task.id);
 
   newTodoCard.innerHTML = `
-  <header>
+  <header class="header">
   <h4 class="name">${task.name}</h4>
   <span class="assignee">${task.assignee}</span>
   <span class="deadline">${task.deadline}</span>
@@ -83,20 +83,9 @@ function addNewTaskToTheDOM(task) {
   newTodoForm.reset();
 }
 
-function editTaskOnTheDOM(task) {
-  const todoBoard = document.querySelectorAll(".board")[0];
-  const todoCard = document.querySelector(`.card#${task.id}`);
-
-  formFields.forEach((field) => {
-    if (field === "id") return;
-    todoCard.querySelector(`.${field}`).innerHTML = task[field];
-  });
-
-  newTodoForm.reset();
-}
-
 function editTodo(e) {
   const cardToEdit = e.target?.parentNode?.parentNode;
+  const header = cardToEdit.querySelector(".header");
 
   // Put card to edit data into the form values
   const id = cardToEdit.getAttribute("id");
@@ -105,22 +94,78 @@ function editTodo(e) {
   const deadline = cardToEdit.querySelector(".deadline").innerHTML;
   const description = cardToEdit.querySelector(".description").innerHTML;
 
-  const taskToEdit = { id, name, assignee, deadline, description };
 
-  formFields.forEach((field) => {
-    newTodoForm.querySelector(`#${field}`).value = taskToEdit[field];
-  });
+  //Create inputs
+  var newHtmlEditor = `
+  <div class= "editMode">
+  <label for="nameEdit">Tarefa:</label>
+  <input id="nameEdit" class="nameEdit" type="text" value="${name}">
+  <br/>
+  <label for="assigneeEdit">Atribuido:</label>
+  <input id="assigneeEdit" class="assigneeEdit" type="text" value="${assignee}">
+  <br/>
+  <label for="descriptionEdit">Descrição:</label>
+  <input id="descriptionEdit" class="descriptionEdit" type="text" value="${description}">
+  <br/>
+  <label for="deadlineEdit">Prazo:</label>
+  <input id="deadlineEdit" class="deadlineEdit" type="date" value="${deadline}">
+  </div>
+  `;
+
+  //Edition mode
+  header.querySelector(".name").innerHTML = "Modo edição";
+  cardToEdit.querySelector(".description").innerHTML = "";
+  header.insertAdjacentHTML('beforeend', newHtmlEditor);
+
+
+  //Remover
+  header.removeChild(header.querySelector(".assignee"));
+  header.removeChild(header.querySelector(".deadline"));
 
   // Disable card actions and add aditing class to the form
-  cardToEdit.querySelector(".edit").setAttribute("disabled", "true");
-  cardToEdit.querySelector(".remove").setAttribute("disabled", "true");
+  const btnEdit = cardToEdit.querySelector(".edit");
+  btnEdit.innerHTML = "Concluir";
+  btnEdit.onclick = completeEdit;
   cardToEdit.setAttribute("draggable", "false");
-  newTodoForm.classList.add("editing");
+}
+
+function completeEdit(e){
+  const cardToEdit = e.target?.parentNode?.parentNode;
+  const header = cardToEdit.querySelector(".header");
+
+  // Put card to edit data into the form values
+  const id = cardToEdit.getAttribute("id");
+  const name = cardToEdit.querySelector(".nameEdit").value;
+  const assignee = cardToEdit.querySelector(".assigneeEdit").value;
+  const deadline = cardToEdit.querySelector(".deadlineEdit").value;
+  const description = cardToEdit.querySelector(".descriptionEdit").value;
+
+
+  //Create elements
+  var newHtml = `
+  <span class="assignee">${assignee}</span>
+  <span class="deadline">${deadline}</span>
+  `;
+
+  //Insert values
+  header.querySelector(".name").innerHTML = name;
+  cardToEdit.querySelector(".description").innerHTML = description;
+  header.insertAdjacentHTML('beforeend', newHtml);
+
+
+  //Remover inputs
+  header.removeChild(cardToEdit.querySelector(".editMode"));
+
+
+  // Disable card actions and add aditing class to the form
+  const btnEdit = cardToEdit.querySelector(".edit");
+  btnEdit.innerHTML = "Editar";
+  btnEdit.onclick = editTodo;
+  cardToEdit.setAttribute("draggable", "true");
 }
 
 function handleSubmit(e) {
   e.preventDefault();
-  const isEditing = !!e.target[0].value;
 
   const id = e.target[0].value || `card-${Date.now()}`;
   const name = e.target[1].value.trim();
@@ -139,11 +184,8 @@ function handleSubmit(e) {
     return;
   }
 
-  if (isEditing) {
-    editTaskOnTheDOM(task);
-  } else {
-    addNewTaskToTheDOM(task);
-  }
+  addNewTaskToTheDOM(task);
+  
 }
 
 newTodoForm.addEventListener("submit", handleSubmit);
