@@ -1,23 +1,9 @@
 [
   {
-    "id": "card-1",
     "name": "Trabalho de Web 1",
     "description": "Finalizar trabalho de prática com node",
     "assignee": "Jubileu sa Silva",
-    "deadline": "2021-12-01"
-  },
-  {
-    "id": "card-2",
-    "name": "Prova de Web 1",
-    "description": "Revisar conceitos para a prova",
-    "assignee": "Renan Alves",
-    "deadline": "2021-12-03"
-  },
-  {
-    "id": "card-3",
-    "name": "Estudar para FMC",
-    "description": "Estudar capítulo de conjuntos",
-    "assignee": "Artur Santiago",
-    "deadline": "2021-12-04"
+    "deadline": "2021-12-01",
+    "id": "f5fc6cd5-2de9-4f92-8fcf-dcbb99a1c801"
   }
 ]
