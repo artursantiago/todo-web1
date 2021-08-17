@@ -1,9 +1,15 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
-const uuid = require('uuid');
+const { v4: uuid } = require('uuid');
 
 const DATABASE_FILE_PATH = '/tasks.json';
+
+function validateUUID(id) {
+  const pattern =
+    /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+  return pattern.test(id);
+}
 
 /** Read todos from file and returns it */
 function readFromFile(pathname) {
@@ -29,6 +35,11 @@ function writeOnFile(pathname, data) {
     console.log(error);
     return;
   }
+}
+
+function getIdFromPathname(pathname) {
+  const [_, id] = pathname.split('/todos/');
+  return id || '';
 }
 
 /** handle GET request */
@@ -58,7 +69,7 @@ function postHandler(req, res, reqUrl) {
       let todoToBeSaved = JSON.parse(body);
       todoToBeSaved = {
         ...todoToBeSaved,
-        id: uuid.v4(),
+        id: uuid(),
       };
 
       const currentTodos = readFromFile(DATABASE_FILE_PATH);
@@ -85,6 +96,78 @@ function postHandler(req, res, reqUrl) {
   });
 }
 
+/** handle PUT request */
+function putHandler(req, res, reqUrl) {
+  req.setEncoding('utf8');
+
+  let body = '';
+  req.on('data', (chunk) => {
+    body += chunk.toString(); // convert Buffer to string
+  });
+
+  req.on('end', () => {
+    try {
+      let todoToBeUpdated = JSON.parse(body);
+
+      const currentTodos = readFromFile(DATABASE_FILE_PATH);
+      if (!currentTodos) throw new Error();
+
+      const foundTodo = currentTodos.findIndex(
+        (todo) => todo.id === todoToBeUpdated.id
+      );
+
+      if (foundTodo === -1) {
+        res.writeHead(404, {
+          'Content-Type': 'text/html',
+          'Access-Control-Allow-Origin': '*',
+        });
+        res.end();
+        return;
+      }
+
+      const newTodos = currentTodos.map((todo) =>
+        todo.id === todoToBeUpdated.id ? todoToBeUpdated : todo
+      );
+
+      writeOnFile(DATABASE_FILE_PATH, JSON.stringify(newTodos));
+
+      res.writeHead(200, {
+        'Content-Type': 'text/html',
+        'Access-Control-Allow-Origin': '*',
+      });
+
+      res.write(JSON.stringify(todoToBeUpdated));
+    } catch (error) {
+      res.writeHead(500, {
+        'Content-Type': 'text/html',
+        'Access-Control-Allow-Origin': '*',
+      });
+      res.write(JSON.stringify(error.toString()));
+    }
+    res.end();
+  });
+}
+
+/** handle DELETE request */
+function deleteHandler(req, res, reqUrl) {
+  const id = getIdFromPathname(reqUrl.pathname);
+
+  const todos = readFromFile(DATABASE_FILE_PATH);
+
+  const foundTodo = todos.findIndex((todo) => todo.id === id);
+  if (foundTodo !== -1) {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    writeOnFile(DATABASE_FILE_PATH, JSON.stringify(newTodos));
+  }
+
+  res.writeHead(foundTodo !== -1 ? 200 : 404, {
+    'Content-Type': 'text/html',
+    'Access-Control-Allow-Origin': '*',
+  });
+
+  res.end();
+}
+
 /** if there is no related function which handles the request, then show error message */
 function noResponse(req, res) {
   res.writeHead(404);
@@ -96,20 +179,40 @@ http
   .createServer((req, res) => {
     // create an object for all redirection options
     const router = {
-      'GET/todos': getHandler,
-      'POST/todos': postHandler,
-      'PUT/todos': getHandler,
-      'PUT/todos': getHandler,
-      'DELETE/todos': getHandler,
-      default: noResponse,
+      GET: {
+        validate: (pathname) => pathname.match(/\/todos/),
+        handler: getHandler,
+      },
+      POST: {
+        validate: (pathname) => pathname.match(/\/todos/),
+        handler: postHandler,
+      },
+      PUT: {
+        validate: (pathname) => pathname.match(/\/todos/),
+        handler: putHandler,
+      },
+      DELETE: {
+        validate: (pathname) => {
+          if (!pathname.includes('/todos/')) return false;
+
+          const id = getIdFromPathname(pathname);
+
+          return validateUUID(id);
+        },
+        handler: deleteHandler,
+      },
     };
     // parse the url by using WHATWG URL API
     let reqUrl = new URL(req.url, 'http://127.0.0.1/');
 
     // find the related function by searching "method + pathname" and run it
-    let redirectedFunc =
-      router[req.method + reqUrl.pathname] || router['default'];
-    redirectedFunc(req, res, reqUrl);
+    const reqMethod = router[req.method];
+
+    if (reqMethod && reqMethod.validate(reqUrl.pathname)) {
+      reqMethod.handler(req, res, reqUrl);
+    } else {
+      noResponse(req, res, reqUrl);
+    }
   })
   .listen(8080, () => {
     console.log('Server is running at http://127.0.0.1:8080/');
