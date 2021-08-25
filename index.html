@@ -5,60 +5,24 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo</title>
+  <link rel="icon" href="imagens/icone.png">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/page.css" rel="stylesheet">
+  <title>To-do: Lista de afazeres</title>
 
-  <style>
-    .hide {
-      display: none;
-    }
-
-    .boards {
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-    }
-
-    .board {
-      padding: 24px 16px 0;
-      min-width: 280px;
-      border: 1px solid black;
-      margin-top: 24px;
-    }
-
-    .dropzone {
-      padding-bottom: 48px;
-      height: 100%;
-      min-height: 200px;
-      width: 100%;
-    }
-
-    .card {
-      border: 1px solid black;
-    }
-
-    .card[draggable=true] {
-      cursor: grab;
-    }
-
-    .card.is-dragging {
-      cursor: move;
-    }
-
-    .card+.card {
-      margin-top: 24px;
-    }
-
-    button {
-      cursor: pointer;
-    }
-  </style>
 </head>
 
 <body>
   <header>
-    <h1>TODO</h1>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <img src="imagens/icone.png" width="100px">
+    </nav>
   </header>
-  <section>
+
+
+  <!Section estás sendo cortado>
+
+  <section style="padding-top: 100px;">
     <form class="editing">
       <input id="id" type="text" class="hide" value="">
       <div>
@@ -81,26 +45,33 @@
     </form>
   </section>
 
-  <main>
-    <div class="boards">
-      <div class="board">
-        <h3>A Fazer</h3>
-        <div class="dropzone">
-        </div>
-      </div>
+  <!Section estás sendo cortado>
 
-      <div class="board">
-        <h3>Fazendo</h3>
-        <div class="dropzone">
+  <main style="padding-top: 20px;">
+    <div class="container marketing"> <!Antes nada>
+      
+    <div class="row"> <!Antes class="boards">
+      <div class="col-lg-4">
+        <div class="board">
+          <h3>A Fazer</h3>
+          <div class="dropzone"></div>
+        </div>
+     </div>
+
+      <div class="col-lg-4">
+        <div class="board">
+          <h3>Fazendo</h3>
+          <div class="dropzone"></div>
         </div>
       </div>
-      <div class="board">
-        <h3>Feito</h3>
-        <div class="dropzone">
+      <div class="col-lg-4">
+        <div class="board">
+          <h3>Feito</h3>
+          <div class="dropzone"></div>
         </div>
       </div>
     </div>
-
+</div>
 
   </main>
 

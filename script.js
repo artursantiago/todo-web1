@@ -1,6 +1,8 @@
 /* START -  Drag And Drop */
 const cards = document.querySelectorAll('.card');
 const dropzones = document.querySelectorAll('.dropzone');
+const todoBoard = document.querySelectorAll('.board')[0];
+
 
 // Cards
 cards.forEach(addCardDragEvents);
@@ -55,7 +57,6 @@ function removeTodo(e) {
 }
 
 function addNewTaskToTheDOM(task) {
-  const todoBoard = document.querySelectorAll('.board')[0];
   const newTodoCard = document.createElement('div');
 
   newTodoCard.setAttribute('class', 'card');
