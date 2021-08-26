@@ -1,9 +1,1 @@
-[
-  {
-    "name": "Trabalho de Web 1",
-    "description": "Finalizar trabalho de prática com node",
-    "assignee": "Jubileu sa Silva",
-    "deadline": "2021-12-01",
-    "id": "f5fc6cd5-2de9-4f92-8fcf-dcbb99a1c801"
-  }
-]
+[{"name":"Trabalho de Web 1","description":"Finalizar trabalho de prática com node","assignee":"Jubileu sa Silva","deadline":"2021-12-01","id":"f5fc6cd5-2de9-4f92-8fcf-dcbb99a1c801","status":"todo"},{"id":"f5fc6cd5-2de9-4f92-8fcf-dcbb99a1c802","status":"doing","name":"Trabalho de Web 2","description":"Finalizar trabalho de prática com node","assignee":"Jubileu sa Silva","deadline":"2021-12-01"},{"name":"Trabalho de Web 3","description":"Finalizar trabalho de prática com node","assignee":"Jubileu sa Silva","deadline":"2021-12-01","id":"f5fc6cd5-2de9-4f92-8fcf-dcbb99a1c803","status":"done"}]

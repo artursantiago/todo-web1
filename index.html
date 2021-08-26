@@ -5,70 +5,50 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="imagens/icone.png">
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="images/icon.png">
+
+  <!-- Bootstrap styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+  <!-- Fontawesome styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <link href="css/page.css" rel="stylesheet">
   <title>To-do: Lista de afazeres</title>
-
 </head>
 
-<body background="imagens/background.jpg">
+<body background="images/background.jpg" style="padding-top: 100px;">
   <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <img src="imagens/icone.png" width="90px">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark d-flex justify-content-between">
+      <img src="images/icon.png" width="90px">
 
-      <div class="form-inline mt-2 mt-md-0">
 
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Criar nova tarefa</button>
-      </div>
+      <!-- Button trigger task form modal -->
+      <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#taskModal">
+        Criar nova tarefa
+      </button>
     </nav>
   </header>
 
-
-  <!Section estás sendo cortado>
-
-  <section style="padding-top: 100px;">
-    <form class="editing">
-      <input id="id" type="text" class="hide" value="">
-      <div>
-        <label for="name">Nome da tarefa</label>
-        <input id="name" type="text">
-      </div>
-      <div>
-        <label for="description">Descrição da tarefa</label>
-        <input id="description" type="text">
-      </div>
-      <div>
-        <label for="assignee">Atribuir para</label>
-        <input id="assignee" type="text">
-      </div>
-      <div>
-        <label for="deadline">Prazo de entrega</label>
-        <input id="deadline" type="date">
-      </div>
-      <button type="submit">Adicionar</button>
-    </form>
-  </section>
-
-  <!Section estás sendo cortado>
-
-  <main">
-    <div class="row"> <!Antes class="boards">
+  <main>
+    <div class="row">
+      <!--Antes class="boards"-->
       <div class="col-lg-4">
-        <div class="board">
+        <div id="todo-column" class="board">
           <h3>A Fazer</h3>
           <div class="dropzone"></div>
         </div>
-     </div>
+      </div>
 
       <div class="col-lg-4">
-        <div class="board">
+        <div id="doing-column" class="board">
           <h3>Fazendo</h3>
           <div class="dropzone"></div>
         </div>
       </div>
       <div class="col-lg-4">
-        <div class="board">
+        <div id="done-column" class="board">
           <h3>Feito</h3>
           <div class="dropzone"></div>
         </div>
@@ -76,6 +56,52 @@
     </div>
 
   </main>
+
+  <!-- Task Form Modal -->
+  <div class="modal fade editing" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="taskModalLabel">Criar nova tarefa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <input id="id" type="text" class="hide" value="">
+            <input id="status" type="text" class="hide" value="">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="name">
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Descrição</label>
+              <textarea class="form-control" id="description" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="assignee" class="form-label">Atribuir para</label>
+              <input type="text" class="form-control" id="assignee">
+            </div>
+            <div class="mb-3">
+              <label for="deadline" class="form-label">Prazo de entrega</label>
+              <input type="date" class="form-control" id="deadline">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="handleSaveTask()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.0.0.slim.min.js"></script>
+
 
   <script src="script.js"></script>
 </body>

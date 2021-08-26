@@ -5,6 +5,14 @@ const { v4: uuid } = require('uuid');
 
 const DATABASE_FILE_PATH = '/tasks.json';
 
+const headers = {
+  'Content-Type': 'application/json, text/html, */*',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT',
+  'Access-Control-Allow-Headers':
+    'Content-Type,Authorization,Access-Control-Allow-Origin',
+};
+
 function validateUUID(id) {
   const pattern =
     /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
@@ -46,10 +54,7 @@ function getIdFromPathname(pathname) {
 function getHandler(req, res, reqUrl) {
   const todos = readFromFile(DATABASE_FILE_PATH);
 
-  res.writeHead(todos ? 200 : 404, {
-    'Content-Type': 'text/html',
-    'Access-Control-Allow-Origin': '*',
-  });
+  res.writeHead(todos ? 200 : 404, headers);
 
   todos && res.write(JSON.stringify(todos));
   res.end();
@@ -80,16 +85,10 @@ function postHandler(req, res, reqUrl) {
         JSON.stringify([...currentTodos, todoToBeSaved])
       );
 
-      res.writeHead(200, {
-        'Content-Type': 'text/html',
-        'Access-Control-Allow-Origin': '*',
-      });
+      res.writeHead(200, headers);
       res.write(JSON.stringify(todoToBeSaved));
     } catch (error) {
-      res.writeHead(500, {
-        'Content-Type': 'text/html',
-        'Access-Control-Allow-Origin': '*',
-      });
+      res.writeHead(500, headers);
       res.write(JSON.stringify(error.toString()));
     }
     res.end();
@@ -117,10 +116,7 @@ function putHandler(req, res, reqUrl) {
       );
 
       if (foundTodo === -1) {
-        res.writeHead(404, {
-          'Content-Type': 'text/html',
-          'Access-Control-Allow-Origin': '*',
-        });
+        res.writeHead(404, headers);
         res.end();
         return;
       }
@@ -131,17 +127,11 @@ function putHandler(req, res, reqUrl) {
 
       writeOnFile(DATABASE_FILE_PATH, JSON.stringify(newTodos));
 
-      res.writeHead(200, {
-        'Content-Type': 'text/html',
-        'Access-Control-Allow-Origin': '*',
-      });
+      res.writeHead(200, headers);
 
       res.write(JSON.stringify(todoToBeUpdated));
     } catch (error) {
-      res.writeHead(500, {
-        'Content-Type': 'text/html',
-        'Access-Control-Allow-Origin': '*',
-      });
+      res.writeHead(500, headers);
       res.write(JSON.stringify(error.toString()));
     }
     res.end();
@@ -160,11 +150,15 @@ function deleteHandler(req, res, reqUrl) {
     writeOnFile(DATABASE_FILE_PATH, JSON.stringify(newTodos));
   }
 
-  res.writeHead(foundTodo !== -1 ? 200 : 404, {
-    'Content-Type': 'text/html',
-    'Access-Control-Allow-Origin': '*',
-  });
+  res.writeHead(foundTodo !== -1 ? 200 : 404, headers);
 
+  res.end();
+}
+
+/** handle OPTION request */
+function optionsHandler(req, res, reqUrl) {
+  const id = getIdFromPathname(reqUrl.pathname);
+  res.writeHead(200, headers);
   res.end();
 }
 
@@ -194,12 +188,14 @@ http
       DELETE: {
         validate: (pathname) => {
           if (!pathname.includes('/todos/')) return false;
-
           const id = getIdFromPathname(pathname);
-
           return validateUUID(id);
         },
         handler: deleteHandler,
+      },
+      OPTIONS: {
+        validate: (pathname) => pathname.match(/\/todos/),
+        handler: optionsHandler,
       },
     };
     // parse the url by using WHATWG URL API
