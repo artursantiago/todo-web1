@@ -154,9 +154,9 @@ async function handleSaveTask() {
   if (!savedTask) return;
 
   if (task.id) {
-    editTaskInTheDOM(savedTask);
+    editTaskInTheDOM(task);
   } else {
-    addNewTaskToTheDOM(savedTask);
+    addNewTaskToTheDOM(task);
   }
 
   $('#taskModal').modal('hide');
