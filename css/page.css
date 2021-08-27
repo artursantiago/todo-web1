@@ -94,6 +94,30 @@ button {
   margin-top: 10px;
 }
 
+.card .div-actions{
+  border-top: 1px solid black;
+}
+
+.card .div-description{
+  text-align: justify;
+  padding-right: 5%;
+  padding-left: 5%;
+}
+
+.card .div-info{
+  color: #28a745;
+  text-align: justify;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 5%;
+  padding-left: 5%; 
+}
+
+.card .header{
+  padding-right: 3%;
+  padding-left: 3%; 
+}
+
 
 
 /* RESPONSIVE CSS

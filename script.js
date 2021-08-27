@@ -62,23 +62,33 @@ function addNewTaskToTheDOM(task) {
   <header class="header">
     <span class="status d-none">${task.status}</span>
     <h4 class="name">${task.name}</h4>
-    <span class="assignee">${task.assignee}</span>
-    <span class="deadline">${task.deadline}</span>
   </header>
   
-  <p class="description">${task.description}</p>
+
+  <div class="div-description">
+    <i class="fas fa-bars"></i>
+    <span class="description">${task.description}</span>
+  </div>
   
-  <div>
+  <div class="div-info">
+    <i class="fas fa-user-friends"></i>
+    <span class="assignee">${task.assignee}</span>
+    <br/>
+    <i class="fas fa-calendar"></i>
+    <span class="deadline">${task.deadline}</span>
+  </div>
+
+  <div class="div-actions">
     <!-- Button trigger task form modal -->
     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#taskModal" onclick="handleClickEditTask(event)">
-      <span>Editar</span>
       <i class="fas fa-edit"></i>
+      <span>Editar</span>
     </button>
 
     <!-- Button trigger remove task modal -->
     <button type="button" class="btn" onclick="handleRemoveTask(event)">
-      <span>Remover</span>
       <i class="fas fa-trash"></i>
+      <span>Remover</span>
     </button>
   </div>
   `;
