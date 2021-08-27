@@ -71,11 +71,13 @@ function addNewTaskToTheDOM(task) {
   <div>
     <!-- Button trigger task form modal -->
     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#taskModal" onclick="handleClickEditTask(event)">
+      <span>Editar</span>
       <i class="fas fa-edit"></i>
     </button>
 
     <!-- Button trigger remove task modal -->
     <button type="button" class="btn" onclick="handleRemoveTask(event)">
+      <span>Remover</span>
       <i class="fas fa-trash"></i>
     </button>
   </div>
@@ -154,9 +156,9 @@ async function handleSaveTask() {
   if (!savedTask) return;
 
   if (task.id) {
-    editTaskInTheDOM(task);
+    editTaskInTheDOM(savedTask);
   } else {
-    addNewTaskToTheDOM(task);
+    addNewTaskToTheDOM(savedTask);
   }
 
   $('#taskModal').modal('hide');
