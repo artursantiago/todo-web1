@@ -66,6 +66,14 @@ button {
   overflow-y: auto;
 }
 
+
+.dropzone:empty {
+  background-image: url("../images/lista_vazia.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .card .btn:hover{
   color: #28a745;
 }
