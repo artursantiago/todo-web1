@@ -104,15 +104,63 @@ function putHandler(req, res, reqUrl) {
       const currentTodos = readFromFile(DATABASE_FILE_PATH);
       if (!currentTodos) throw new Error();
 
-      const foundTodo = currentTodos.findIndex(
+      const foundTodoIndex = currentTodos.findIndex(
         (todo) => todo.id === todoToBeUpdated.id
       );
 
-      if (foundTodo === -1) {
+      if (foundTodoIndex === -1) {
         res.writeHead(404, headers);
         res.end();
         return;
       }
+
+      const newTodos = currentTodos.map((todo) =>
+        todo.id === todoToBeUpdated.id ? todoToBeUpdated : todo
+      );
+
+      writeOnFile(DATABASE_FILE_PATH, JSON.stringify(newTodos));
+
+      res.writeHead(200, headers);
+
+      res.write(JSON.stringify(todoToBeUpdated));
+    } catch (error) {
+      res.writeHead(500, headers);
+      res.write(JSON.stringify(error.toString()));
+    }
+    res.end();
+  });
+}
+
+/** handle PATCH request */
+function patchHandler(req, res, reqUrl) {
+  req.setEncoding('utf8');
+
+  let body = '';
+  req.on('data', (chunk) => {
+    body += chunk.toString(); // convert Buffer to string
+  });
+
+  req.on('end', () => {
+    try {
+      let todoToBeUpdated = JSON.parse(body);
+
+      const currentTodos = readFromFile(DATABASE_FILE_PATH);
+      if (!currentTodos) throw new Error();
+
+      const foundTodo = currentTodos.find(
+        (todo) => todo.id === todoToBeUpdated.id
+      );
+
+      if (!foundTodo) {
+        res.writeHead(404, headers);
+        res.end();
+        return;
+      }
+
+      todoToBeUpdated = {
+        ...foundTodo,
+        ...todoToBeUpdated,
+      };
 
       const newTodos = currentTodos.map((todo) =>
         todo.id === todoToBeUpdated.id ? todoToBeUpdated : todo
@@ -177,6 +225,10 @@ http
       PUT: {
         validate: (pathname) => pathname.match(/\/todos/),
         handler: putHandler,
+      },
+      PATCH: {
+        validate: (pathname) => pathname.match(/\/todos/),
+        handler: patchHandler,
       },
       DELETE: {
         validate: (pathname) => {

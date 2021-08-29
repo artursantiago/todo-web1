@@ -17,8 +17,22 @@ function handleDragStart() {
 
 function handleDrag() {}
 
-function handleDragEnd() {
+function handleDragEnd(event) {
   this.classList.remove('is-dragging');
+
+  if (
+    ['todo-column', 'doing-column', 'done-column'].includes(
+      event.target.parentNode.parentNode.id
+    )
+  ) {
+    const id = event.target.id;
+    const previousStatus = event.target.querySelector('.status').innerHTML;
+    const [newStatus] = event.target.parentNode.parentNode.id.split('-');
+
+    if (newStatus !== previousStatus) {
+      updateStatus(id, newStatus);
+    }
+  }
 }
 
 // Dropzones
@@ -40,7 +54,9 @@ function handleDragOver() {
 
 function handleDragLeave() {}
 
-function handleDrop() {}
+function handleDrop() {
+  console.log('DROPOU');
+}
 
 /* END -  Drag And Drop */
 
@@ -205,6 +221,19 @@ async function saveTask(task) {
     method: task.id ? 'PUT' : 'POST',
     body: JSON.stringify(task),
   });
+  const data = await response.json();
+  return data;
+}
+
+async function updateStatus(taskId, status) {
+  const response = await fetch('http://127.0.0.1:8080/todos', {
+    method: 'PATCH',
+    body: JSON.stringify({
+      id: taskId,
+      status: status,
+    }),
+  });
+
   const data = await response.json();
   return data;
 }
