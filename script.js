@@ -17,7 +17,7 @@ function handleDragStart() {
 
 function handleDrag() {}
 
-function handleDragEnd(event) {
+async function handleDragEnd(event) {
   this.classList.remove('is-dragging');
 
   if (
@@ -30,7 +30,8 @@ function handleDragEnd(event) {
     const [newStatus] = event.target.parentNode.parentNode.id.split('-');
 
     if (newStatus !== previousStatus) {
-      updateStatus(id, newStatus);
+      const updatedTask = await updateStatus(id, newStatus);
+      event.target.querySelector('.status').innerHTML = updatedTask.status;
     }
   }
 }
