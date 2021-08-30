@@ -200,7 +200,7 @@ async function handleRemoveTask(e) {
 
   const isRemoved = await removeTask(id);
 
-  isRemoved && cardToRemove.remove();
+  cardToRemove.remove();
 }
 
 /* API CALLS */
