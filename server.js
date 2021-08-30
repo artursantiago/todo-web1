@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
+const { v4: uuid } = require('uuid');
 
 const DATABASE_FILE_PATH = '/tasks.json';
 
@@ -11,6 +12,12 @@ const headers = {
   'Access-Control-Allow-Headers':
     'Content-Type,Authorization,Access-Control-Allow-Origin',
 };
+
+function validateUUID(id) {
+  const pattern =
+    /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+  return pattern.test(id);
+}
 
 /** Read todos from file and returns it */
 function readFromFile(pathname) {
@@ -67,7 +74,7 @@ function postHandler(req, res, reqUrl) {
       let todoToBeSaved = JSON.parse(body);
       todoToBeSaved = {
         ...todoToBeSaved,
-        id: new Date().getTime().toString(),
+        id: uuid(),
       };
 
       const currentTodos = readFromFile(DATABASE_FILE_PATH);
@@ -234,7 +241,7 @@ http
         validate: (pathname) => {
           if (!pathname.includes('/todos/')) return false;
           const id = getIdFromPathname(pathname);
-          return !!id;
+          return validateUUID(id);
         },
         handler: deleteHandler,
       },
