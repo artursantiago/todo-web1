@@ -7,15 +7,12 @@ cards.forEach(addCardDragEvents);
 
 function addCardDragEvents(card) {
   card.addEventListener('dragstart', handleDragStart);
-  card.addEventListener('drag', handleDrag);
   card.addEventListener('dragend', handleDragEnd);
 }
 
 function handleDragStart() {
   this.classList.add('is-dragging');
 }
-
-function handleDrag() {}
 
 async function handleDragEnd(event) {
   this.classList.remove('is-dragging');
@@ -40,23 +37,12 @@ async function handleDragEnd(event) {
 dropzones.forEach(addDropzonesDragEvents);
 
 function addDropzonesDragEvents(dropzone) {
-  dropzone.addEventListener('dragenter', handleDragEnter);
   dropzone.addEventListener('dragover', handleDragOver);
-  dropzone.addEventListener('dragleave', handleDragLeave);
-  dropzone.addEventListener('drop', handleDrop);
 }
-
-function handleDragEnter() {}
 
 function handleDragOver() {
   const cardBeingDragged = document.querySelector('.is-dragging');
   if (cardBeingDragged) this.appendChild(cardBeingDragged);
-}
-
-function handleDragLeave() {}
-
-function handleDrop() {
-  console.log('DROPOU');
 }
 
 /* END -  Drag And Drop */
