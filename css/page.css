@@ -19,6 +19,13 @@ button {
 -------------------------------------------------- */
 
 /* Center align the text within the three columns below the carousel */
+.btn-outline-success{
+  margin-right: 4%;
+}
+
+.icon-navbar{
+  margin-left: 3%;
+}
 
 .row {
   width: 100%;
